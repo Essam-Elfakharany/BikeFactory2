@@ -1,0 +1,19 @@
+﻿<h1>Log in</h1>
+<hr />
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <partial name="_Register" model=@ViewBag.RegisterUser />
+        </div>
+        <div class="col-md-6">
+            <partial name="_Signin" model=@ViewBag.User />
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

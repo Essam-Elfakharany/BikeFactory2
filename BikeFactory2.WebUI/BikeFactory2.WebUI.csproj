@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="WebApiClients\BikeFactory2.WebAPIClient.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="WebApiClients\BikeFactory2.WebAPIClient.json">
+      <Generator>NSwagCodeGenerator</Generator>
+      <LastGenOutput>BikeFactory2.WebAPIClient.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.5">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="WebApiClients\BikeFactory2.WebAPIClient.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>BikeFactory2.WebAPIClient.json</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+</Project>

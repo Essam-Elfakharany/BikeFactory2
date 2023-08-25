@@ -1,0 +1,17 @@
+﻿@model UserViewModel;
+
+<form asp-controller="Login" asp-action="Signin">
+	<fieldset class="border p-2">
+		<legend class="float-none w-auto">Sign In</legend>
+
+		<label asp-for=ExistingEmail class="control-label"></label>
+		<span asp-validation-for="ExistingEmail" class="text-danger"></span>
+		<input asp-for="ExistingEmail" class="form-control" />
+
+		<label asp-for="Password" class="control-label"></label>
+		<span asp-validation-for="Password" class="text-danger"></span>
+		<input asp-for="Password" class="form-control" />
+
+		<input type="submit" value="Sign in" class="btn btn-primary vspace" />
+	</fieldset>
+</form>

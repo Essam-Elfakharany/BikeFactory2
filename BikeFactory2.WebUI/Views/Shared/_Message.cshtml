@@ -1,0 +1,6 @@
+﻿@model MessageViewModel
+
+<div class="alert alert-@Model.BootstrapType alert-dismissable d-flex justify-content-between fade show shadow" role="alert">
+    @Html.Raw(Model.Message)
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" />
+</div>

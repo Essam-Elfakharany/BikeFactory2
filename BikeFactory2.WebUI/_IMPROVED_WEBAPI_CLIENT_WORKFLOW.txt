@@ -1,0 +1,49 @@
+﻿/*** IMPROVED WEB API CLIENT WORKFLOW ***If you have to manage multiple Web API clients, or you want to customize the generated CSharp outputthen follow these steps:- Add in your solution a new Console App (SkateFactory4.WebAPI.ClientGenerator for example)- Add the NSwag.CodeGeneration.CSharp NuGet package (version 13.18.2 was used in this workflow)- Replace the code of Program.cs with the one provided down bellow.- In the main method, tweek the parameters of the GenerateClientCode call as you need.- If you need to generate/update multiple Web API clients then add more respective regions in the Main method.*/using NSwag;
+using NSwag.CodeGeneration.CSharp;
+using System.Text.RegularExpressions;
+namespace BikeFactory2.WebAPI.ClientGenerator;
+class Program{
+    static async Task Main(string[] args)
+    {
+        #region *** Generate BikeFactory2.WebAPI client code ***        await GenerateClientCode(
+             /* schemaUrl: */        "http://localhost:2971/Swagger/v1/swagger.json",
+             /* nameSpace: */        "BikeFactory2.WebUI.WebApiClients",
+             /* className: */        "BikeFactory2WebAPIClient",
+             /* outputPath: */      @"C:\ASP.NET\temp\BikeFactory2\BikeFactory2.WebUI\WebApiClients\",
+             /* outputFileName:  */  "BikeFactory2.WebAPIClient.cs",
+             /* valuesToReplace: */ new List<(string, string)>()
+                                    {
+                                    /* EXAMPLE 1 - Simple replace                                         input: "ABC DEF ABC DEF"                                        look for:        (@"ABC",                                        replacement:      @"123")                                         output: "123 DEF 123 DEF" */                                    /* EXAMPLE 2 - Replace using regex groups                                        input: "hello      hi bye hi"                                        look for:        (@"(hello *)(hi)",                                        replacement:      @"$1 PUT_SOMETHING_BETWEEN_HELLO_AND_HI $2")                                         output: "hello       PUT_SOMETHING_BETWEEN_HELLO_AND_HI hi bye hi" */                /* look for: */     (@"(\)\]\n *)(public )(int)( Color)",     //Fix ErrorMessage and EColor                /* replacement: */   @", ErrorMessage = ""The Color field is required.""$1$2EColor$4"),
+                /* look for: */     (@"(\)\]\n *)(public )(int)( SuspensionType)", //Fix ErrorMessage and ESuspentionType                /* replacement: */   @", ErrorMessage = ""The Suspension Type field is required.""$1$2ESuspensionType$4"),
+                /* look for: */     (@"(\)\]\n *)(public )(int)( TireType)", //Fix ErrorMessage and ETireType                /* replacement: */   @", ErrorMessage = ""The Brake Type field is required.""$1$2ETireType$4")
+                                    });
+        #endregion    }
+    /// <summary>    /// Generates a .cs file based on the Web API schema.    /// </summary>    static async Task GenerateClientCode(string schemaUrl,
+                                         string nameSpace,
+                                         string className,
+                                         string outputPath,
+                                         string outputFileName,
+                                         List<(string, string)> valuesToReplace)
+    {
+        var document = await OpenApiDocument.FromUrlAsync(schemaUrl);
+        //Based on https://github.com/christianhelle/apiclientcodegen        var settings = new CSharpClientGeneratorSettings        {
+            ClassName = className,
+            InjectHttpClient = true,
+            GenerateClientClasses = true,
+            GenerateClientInterfaces = true,
+            GenerateDtoTypes = true,
+            GenerateOptionalParameters = true,
+            GenerateResponseClasses = true,
+            CSharpGeneratorSettings =            {
+                Namespace = nameSpace,
+                ClassStyle = NJsonSchema.CodeGeneration.CSharp.CSharpClassStyle.Poco            },
+            UseBaseUrl = false,
+            ParameterDateFormat = "s"        };
+        var generator = new CSharpClientGenerator(document, settings);
+        var code = generator.GenerateFile();
+        foreach (var replaceItem in valuesToReplace)
+        {
+            code = Regex.Replace(code, replaceItem.Item1, replaceItem.Item2); //By default it's case sensitive. Check RegexOptions for more.        }
+        await File.WriteAllTextAsync($"{outputPath}{outputFileName}", code);
+    }
+}

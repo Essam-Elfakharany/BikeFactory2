@@ -1,0 +1,22 @@
+﻿@model RegisterUserViewModel
+
+<form asp-controller="Login" asp-action="Register">
+	<fieldset class="border p-2">
+		<legend class="float-none w-auto">New User (Register here)</legend>
+
+		<label asp-for="NewEmail" class="control-label"></label>
+		<span asp-validation-for="NewEmail" class="text-danger"></span>
+		<input asp-for="NewEmail" class="form-control" />
+
+		<label asp-for="Password" class="control-label"></label>
+		<span asp-validation-for="Password" class="text-danger"></span>
+		<input asp-for="Password" class="form-control" />
+
+		<label asp-for="PasswordConfirm" class="control-label"></label>
+		<span asp-validation-for="PasswordConfirm" class="text-danger"></span>
+		<input asp-for="PasswordConfirm" class="form-control" />
+
+		<input type="submit" value="Register" class="btn btn-primary vspace" />
+	</fieldset>
+
+</form>
